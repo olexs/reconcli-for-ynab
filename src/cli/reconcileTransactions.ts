@@ -1,7 +1,7 @@
 import {Account, api, BudgetSummary, SaveTransaction, TransactionDetail, UpdateTransaction, utils} from "ynab";
-import {getStatusText, printTransactions} from "../cli/printTransactions";
-import {formatYnabAmount} from "../cli/formatYnabAmount";
-import {question} from "../cli/readline";
+import {getStatusText, printTransactions} from "./printTransactions";
+import {formatYnabAmount} from "./formatYnabAmount";
+import {question} from "./readline";
 import ClearedEnum = TransactionDetail.ClearedEnum;
 
 export async function reconcileTransactions(ynabApi: api,
