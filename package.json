@@ -1,6 +1,6 @@
 {
   "name": "reconcli-for-ynab",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "ReconCLI for YNAB - a CLI for quickly reconciling YNAB accounts",
   "keywords": [
     "ynab",
