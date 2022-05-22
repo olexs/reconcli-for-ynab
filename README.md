@@ -25,7 +25,7 @@ ReconCLI for YNAB - a CLI for quickly reconciling YNAB accounts
 
 ### Prerequisites
 
-- Node.js (versions ≥14 supported, lower may work but not guaranteed)
+- [Node.js](https://nodejs.org) (versions ≥14 supported, lower may work but not guaranteed)
 - [Personal Access Token](https://api.youneedabudget.com/#personal-access-tokens) for your YNAB account
 
 ### Installation
