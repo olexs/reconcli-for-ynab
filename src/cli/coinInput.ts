@@ -1,4 +1,7 @@
 import {InputMode} from "../options";
+import {question} from "./readline";
+import {formatYnabAmount} from "./formatYnabAmount";
+import {getNumberInput} from "./getNumberInput";
 
 const coinMaps = new Map<InputMode, {name: string; value: number}[]>([
     ['euro-coins', [
@@ -35,7 +38,32 @@ const coinMaps = new Map<InputMode, {name: string; value: number}[]>([
 ]);
 
 export async function coinInput(mode: InputMode): Promise<number> {
-    // TODO implement coin input mode
-    return 0;
+    const coins = coinMaps.get(mode);
+    if (!coins) {
+        console.error(`Cannot find coin map for '${mode}', aborting.`);
+        process.exit(1);
+    }
+
+    let coinsTotalAmount = 0;
+    for (const coin of coins) {
+        let validInput = false;
+        while (!validInput) {
+            const inputRaw = (await question(`Number of ${coin.name} [0]: `)) || "0";
+            const inputNumber = parseInt(inputRaw);
+            if (!isNaN(inputNumber) && inputNumber >= 0) {
+                validInput = true;
+                coinsTotalAmount += Math.round(inputNumber * coin.value * 1000);
+            } else {
+                console.error('Invalid input, please input an integer >= 0 or nothing');
+            }
+        }
+    }
+
+    console.info(`Total amount from coins is ${formatYnabAmount(coinsTotalAmount)}.`);
+
+    const paperCashAmount = await getNumberInput('Enter the amount of paper cash', 0);
+    console.info(`Total balance from coins and paper cash is ${formatYnabAmount(coinsTotalAmount + paperCashAmount)}.`);
+
+    return coinsTotalAmount + paperCashAmount;
 }
 
