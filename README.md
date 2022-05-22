@@ -7,6 +7,8 @@
 
 ReconCLI for YNAB - a CLI for quickly reconciling YNAB accounts
 
+[![Works with YNAB](https://api.youneedabudget.com/papi/works_with_ynab.svg)](https://api.youneedabudget.com/)
+
 ## Features
 
 - Quickly reconcile your YNAB accounts from a terminal
