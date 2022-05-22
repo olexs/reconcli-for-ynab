@@ -1,5 +1,10 @@
 # ReconCLI for YNAB
 
+[![Build Status](https://github.com/olexs/reconcli-for-ynab/actions/workflows/npm-publish.yml/badge.svg)](https://github.com/olexs/reconcli-for-ynab/actions?query=workflow%3A%22npm-publish%22)
+[![NPM Version](http://img.shields.io/npm/v/reconcli-for-ynab.svg?style=flat)](https://www.npmjs.org/package/reconcli-for-ynab)
+[![NPM Downloads](https://img.shields.io/npm/dm/reconcli-for-ynab.svg?style=flat)](https://npmcharts.com/compare/reconcli-for-ynab?minimal=true)
+[![Install Size](https://packagephobia.now.sh/badge?p=reconcli-for-ynab)](https://packagephobia.now.sh/result?p=reconcli-for-ynab)
+
 ReconCLI for YNAB - a CLI for quickly reconciling YNAB accounts
 
 ## Features
@@ -63,7 +68,7 @@ Options:
 ## Built with
 
 - [YNAB API](https://api.youneedabudget.com/) (via the [JavaScript library](https://github.com/ynab/ynab-sdk-js))
-- [Commander.js](https://github.com/tj/commander.js)
+- [Commander.js](https://github.com/olexs/reconcli-for-ynab)
 - [TypeScript](https://www.typescriptlang.org/)
 
 ## Acknowledgements
