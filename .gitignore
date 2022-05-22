@@ -106,3 +106,6 @@ dist
 # IntelliJ
 *.iml
 .idea
+
+# MacOS
+.DS_Store
