@@ -3,16 +3,21 @@
     "module": "commonjs",
     "target": "es5",
     "lib": ["es6", "es2015", "dom"],
-    "sourceMap": true,
+    "sourceMap": false,
     "outDir": "dist",
     "rootDir": "src",
     "types": ["node"],
     "strict": true,
     "esModuleInterop": true,
     "resolveJsonModule": true,
-    "downlevelIteration": true
+    "downlevelIteration": true,
+    "declaration": true
   },
+  "include": [
+    "./src/**/*"
+  ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "dist"
   ]
 }
