@@ -9,8 +9,6 @@
     "types": ["node"],
     "strict": true,
     "esModuleInterop": true,
-    "resolveJsonModule": true,
-    "downlevelIteration": true,
     "declaration": true
   },
   "include": [
