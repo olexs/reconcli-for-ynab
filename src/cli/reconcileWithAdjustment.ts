@@ -1,70 +1,16 @@
-import {Account, api, BudgetSummary, SaveTransaction, TransactionDetail, UpdateTransaction} from "ynab";
-import {getStatusText, printTransactions} from "./printTransactions";
-import {formatYnabAmount} from "./formatYnabAmount";
+import {Account, api, BudgetSummary, SaveTransaction, TransactionDetail} from "ynab";
 import {question} from "./readline";
 import {createAdjustmentTx} from "../ynab/createAdjustmentTx";
+import {formatYnabAmount} from "./formatYnabAmount";
+import {getStatusText, printTransactions} from "./printTransactions";
 import ClearedEnum = TransactionDetail.ClearedEnum;
 
-export async function reconcileTransactions(ynabApi: api,
-                                            budget: BudgetSummary,
-                                            account: Account,
-                                            clearedBalance: number,
-                                            inputBalance: number):
-    Promise<{ updatedTransactions: Array<UpdateTransaction>, adjustmentTransaction?: SaveTransaction }> {
-
-    const transactionsResponse = await ynabApi.transactions.getTransactionsByAccount(budget.id, account.id);
-    const transactions = transactionsResponse.data.transactions;
-
-    let clearedTransactionIds: string[];
-    let adjustmentTransaction: SaveTransaction | undefined = undefined;
-
-    if (clearedBalance === inputBalance) {
-        clearedTransactionIds = processNoAdjustmentNeeded(transactions);
-    } else {
-        const result = await processAdjustment(ynabApi, transactions, inputBalance, clearedBalance, budget, account);
-        clearedTransactionIds = result.clearedTransactionIds;
-        adjustmentTransaction = result.adjustmentTx;
-    }
-
-    return {
-        updatedTransactions: clearedTransactionIds
-            .map(id => transactions.find(tx => tx.id === id) as TransactionDetail)
-            .map(tx => ({
-                id: tx.id,
-                account_id: account.id,
-                cleared: ClearedEnum.Reconciled,
-                date: tx.date,
-                amount: tx.amount
-            })),
-        adjustmentTransaction
-    };
-}
-
-function processNoAdjustmentNeeded(transactions: TransactionDetail[]): string[] {
-    const clearedTransactions = transactions.filter(tx => tx.cleared === ClearedEnum.Cleared);
-    const unclearedTransactions = transactions.filter(tx => tx.cleared === ClearedEnum.Uncleared);
-
-    console.info(`New balance matches the cleared balance, no adjustment necessary.`);
-    if (clearedTransactions.length > 0) {
-        console.info(`Marking ${clearedTransactions.length} cleared transactions as reconciled:`);
-        printTransactions(clearedTransactions, false);
-    } else {
-        console.info(`No cleared transactions to mark as reconciled.`);
-    }
-
-    if (unclearedTransactions.length > 0) {
-        console.info(`Leaving ${unclearedTransactions.length} uncleared transactions untouched.`);
-    }
-
-    return clearedTransactions.map(tx => tx.id);
-}
-
-async function processAdjustment(ynabApi: api,
-                                 transactions: Array<TransactionDetail>,
-                                 inputBalance: number,
-                                 clearedBalance: number,
-                                 budget: BudgetSummary,
-                                 account: Account):
+export async function reconcileWithAdjustment(ynabApi: api,
+                                              transactions: Array<TransactionDetail>,
+                                              inputBalance: number,
+                                              clearedBalance: number,
+                                              budget: BudgetSummary,
+                                              account: Account):
     Promise<{ clearedTransactionIds: string[], adjustmentTx?: SaveTransaction }> {
 
     console.info(`New balance differs from the current cleared balance, need to adjust.`);

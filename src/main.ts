@@ -5,7 +5,7 @@ import {getBudget} from "./ynab/getBudget";
 import {getAccount} from "./ynab/getAccount";
 import {getInputBalance} from "./cli/getInputBalance";
 import {formatYnabAmount} from "./cli/formatYnabAmount";
-import {reconcileTransactions} from "./cli/reconcileTransactions";
+import {reconcileTransactions} from "./ynab/reconcileTransactions";
 
 export async function main(options: CliOptions): Promise<void> {
     console.log("Welcome to ReconCLI for YNAB!");
