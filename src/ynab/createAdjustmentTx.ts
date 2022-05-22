@@ -11,6 +11,7 @@ export async function createAdjustmentTx(ynabApi: api, budget: BudgetSummary, ac
         payee_name: "ReconCLI for YNAB: Adjustment",
         memo: "Entered automatically by ReconCLI for YNAB",
         cleared: ClearedEnum.Reconciled,
-        category_id: inflowCategory.id
+        category_id: inflowCategory.id,
+        approved: true
     };
 }
