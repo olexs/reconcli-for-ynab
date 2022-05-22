@@ -2,7 +2,12 @@
   "name": "reconcli-for-ynab",
   "version": "1.0.0",
   "description": "ReconCLI for YNAB - a CLI for quickly reconciling YNAB accounts",
-  "keywords": ["ynab", "cli", "reconcile", "reconcli"],
+  "keywords": [
+    "ynab",
+    "cli",
+    "reconcile",
+    "reconcli"
+  ],
   "author": "Olexandr Savchuk",
   "license": "MIT",
   "homepage": "https://github.com/olexs/reconcli-for-ynab",
@@ -10,7 +15,9 @@
   "bugs": {
     "url": "https://github.com/olexs/reconcli-for-ynab/issues"
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "main": "./dist/index.js",
   "bin": {
     "reconcli-for-ynab": "./dist/index.js"
