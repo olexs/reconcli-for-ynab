@@ -30,8 +30,8 @@ export async function reconcileWithAdjustment(ynabApi: api,
             console.info('Reconciliation aborted. Thank you for using ReconCLI for YNAB!')
             process.exit(0);
         } else if (input.trim() === "f") {
-            if (remainingDifference !== 0) {
-                adjustmentTx = await createAdjustmentTx(ynabApi, budget, account, remainingDifference);
+            adjustmentTx = await createAdjustmentTx(ynabApi, budget.id, account.id, remainingDifference);
+            if (adjustmentTx) {
                 console.info(`Created an adjustment transaction of ${formatYnabAmount(remainingDifference)}.`)
             }
             finishedReconciling = true;

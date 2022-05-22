@@ -72,6 +72,7 @@ Options:
 - [YNAB API](https://api.youneedabudget.com/) (via the [JavaScript library](https://github.com/ynab/ynab-sdk-js))
 - [Commander.js](https://github.com/olexs/reconcli-for-ynab)
 - [TypeScript](https://www.typescriptlang.org/)
+- [Jest](https://jestjs.io/) and [ts-jest](https://kulshekhar.github.io/ts-jest/)
 
 ## Acknowledgements
 
@@ -87,7 +88,7 @@ Issues and pull requests are welcome.
 npm ci         # install dependencies
 npm run start  # run with ts-node once
 npm run watch  # run with ts-node and nodemon, restarting for *.ts file changes
+npm test       # run tests
 npm run build  # build into /dist
 npm run local  # builds and installs the package on the local machine, then runs the binary
-npm test       # run tests (once we have some)
 ```
