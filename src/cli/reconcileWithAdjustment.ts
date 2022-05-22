@@ -65,10 +65,10 @@ function printAdjustmentPrompt(unreconciledTransactions: TransactionDetail[], re
         let promptText: string;
         if (remainingDifference === 0) {
             console.info("No difference remaining, new balance matches the cleared transactions.");
-            promptText = "Enter a transaction index to clear or unclear it, 'f' to finish reconciliation, or 'a' to abort: ";
+            promptText = "Enter a tx index to clear or unclear it, 'f' to finish reconciliation, or 'a' to abort: ";
         } else {
             console.info(`Remaining difference: ${formatYnabAmount(remainingDifference)}`);
-            promptText = "Enter a transaction index to clear or unclear it, 'f' to create an adjustment transaction and finish, or 'a' to abort: ";
+            promptText = "Enter a tx index to clear or unclear it, 'f' to create an adjustment tx and finish, or 'a' to abort: ";
         }
         return promptText;
     } else {
