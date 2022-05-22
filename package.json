@@ -1,7 +1,16 @@
 {
   "name": "reconcli-for-ynab",
   "version": "1.0.0",
-  "description": "",
+  "description": "ReconCLI for YNAB - a CLI for quickly reconciling YNAB accounts",
+  "keywords": ["ynab", "cli", "reconcile", "reconcli"],
+  "author": "Olexandr Savchuk",
+  "license": "MIT",
+  "homepage": "https://github.com/olexs/reconcli-for-ynab",
+  "repository": "github:olexs/reconcli-for-ynab",
+  "bugs": {
+    "url": "https://github.com/olexs/reconcli-for-ynab/issues"
+  },
+  "files": ["dist"],
   "main": "./dist/index.js",
   "bin": {
     "reconcli-for-ynab": "./dist/index.js"
@@ -13,9 +22,6 @@
     "run:local": "npm run build && sudo npm i -g && ynab-reconcile",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "devDependencies": {
     "@types/node": "^17.0.35",
     "nodemon": "^2.0.16",
