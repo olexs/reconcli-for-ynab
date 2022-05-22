@@ -77,7 +77,10 @@ async function processAdjustment(transactions: Array<TransactionDetail>,
         const input = await question(promptText);
         const flipTxIndex = parseInt(input);
 
-        if (input.trim() === "f") {
+        if (input.trim() === "a") {
+            console.info('Reconciliation aborted. Thank you for using ReconCLI for YNAB!')
+            process.exit(0);
+        } else if (input.trim() === "f") {
             if (remainingDifference !== 0) {
                 adjustmentTx = createAdjustmentTx(account, remainingDifference);
                 console.info(`Created an adjustment transaction of ${formatYnabAmount(remainingDifference)}.`)
@@ -89,7 +92,11 @@ async function processAdjustment(transactions: Array<TransactionDetail>,
             remainingDifference -= flippedTransaction.amount;
             console.info(`Marked transaction ${flipTxIndex} as ${getStatusText(flippedTransaction.cleared)}`);
         } else {
-            console.error(`Invalid input. Enter a number between 0 and ${unreconciledTransactions.length - 1} or 'f'.`);
+            if (unreconciledTransactions.length > 0) {
+                console.error(`Invalid input. Enter a number between 0 and ${unreconciledTransactions.length - 1}, 'f' or 'a'.`);
+            } else {
+                console.error(`Invalid input. Enter 'f' or 'a'.`);
+            }
         }
     }
 
@@ -101,21 +108,33 @@ async function processAdjustment(transactions: Array<TransactionDetail>,
 }
 
 function printAdjustmentPrompt(unreconciledTransactions: TransactionDetail[], remainingDifference: number) {
-    // TODO handle if there is a difference but no unreconciled transactions
-
     console.info("----------");
-    console.info("Following transactions are not yet reconciled:");
-    printTransactions(unreconciledTransactions, true);
+    if (unreconciledTransactions.length > 0) {
+        console.info("Following transactions are not yet reconciled:");
+        printTransactions(unreconciledTransactions, true);
 
-    let promptText: string;
-    if (remainingDifference === 0) {
-        console.info("No difference remaining, new balance matches the cleared transactions.");
-        promptText = "Enter a transaction index to clear or unclear it, or 'f' to finish reconciliation: ";
+        let promptText: string;
+        if (remainingDifference === 0) {
+            console.info("No difference remaining, new balance matches the cleared transactions.");
+            promptText = "Enter a transaction index to clear or unclear it, 'f' to finish reconciliation, or 'a' to abort: ";
+        } else {
+            console.info(`Remaining difference: ${formatYnabAmount(remainingDifference)}`);
+            promptText = "Enter a transaction index to clear or unclear it, 'f' to create an adjustment transaction and finish, or 'a' to abort: ";
+        }
+        return promptText;
     } else {
-        console.info(`Remaining difference: ${formatYnabAmount(remainingDifference)}`);
-        promptText = "Enter a transaction index to clear or unclear it, or 'f' to create an adjustment transaction and finish: ";
+        console.info("There are no unreconciled transactions.");
+
+        let promptText: string;
+        if (remainingDifference === 0) {
+            console.info("No difference remaining, new balance matches the current cleared balance.");
+            promptText = "Enter 'f' to finish reconciliation, or 'a' to abort: ";
+        } else {
+            console.info(`Remaining difference: ${formatYnabAmount(remainingDifference)}.`);
+            promptText = "Enter 'f' to create an adjustment transaction and finish reconciliation, or 'a' to abort: ";
+        }
+        return promptText;
     }
-    return promptText;
 }
 
 function createAdjustmentTx(account: Account, remainingDifference: number): SaveTransaction {
