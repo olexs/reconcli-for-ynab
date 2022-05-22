@@ -1,7 +1,8 @@
-import {Account, api, BudgetSummary, SaveTransaction, TransactionDetail, UpdateTransaction, utils} from "ynab";
+import {Account, api, BudgetSummary, SaveTransaction, TransactionDetail, UpdateTransaction} from "ynab";
 import {getStatusText, printTransactions} from "./printTransactions";
 import {formatYnabAmount} from "./formatYnabAmount";
 import {question} from "./readline";
+import {createAdjustmentTx} from "../ynab/createAdjustmentTx";
 import ClearedEnum = TransactionDetail.ClearedEnum;
 
 export async function reconcileTransactions(ynabApi: api,
@@ -20,7 +21,7 @@ export async function reconcileTransactions(ynabApi: api,
     if (clearedBalance === inputBalance) {
         clearedTransactionIds = processNoAdjustmentNeeded(transactions);
     } else {
-        const result = await processAdjustment(transactions, inputBalance, clearedBalance, account);
+        const result = await processAdjustment(ynabApi, transactions, inputBalance, clearedBalance, budget, account);
         clearedTransactionIds = result.clearedTransactionIds;
         adjustmentTransaction = result.adjustmentTx;
     }
@@ -58,9 +59,11 @@ function processNoAdjustmentNeeded(transactions: TransactionDetail[]): string[] 
     return clearedTransactions.map(tx => tx.id);
 }
 
-async function processAdjustment(transactions: Array<TransactionDetail>,
+async function processAdjustment(ynabApi: api,
+                                 transactions: Array<TransactionDetail>,
                                  inputBalance: number,
                                  clearedBalance: number,
+                                 budget: BudgetSummary,
                                  account: Account):
     Promise<{ clearedTransactionIds: string[], adjustmentTx?: SaveTransaction }> {
 
@@ -82,7 +85,7 @@ async function processAdjustment(transactions: Array<TransactionDetail>,
             process.exit(0);
         } else if (input.trim() === "f") {
             if (remainingDifference !== 0) {
-                adjustmentTx = createAdjustmentTx(account, remainingDifference);
+                adjustmentTx = await createAdjustmentTx(ynabApi, budget, account, remainingDifference);
                 console.info(`Created an adjustment transaction of ${formatYnabAmount(remainingDifference)}.`)
             }
             finishedReconciling = true;
@@ -104,7 +107,7 @@ async function processAdjustment(transactions: Array<TransactionDetail>,
         .filter(tx => tx.cleared === ClearedEnum.Cleared)
         .map(tx => tx.id);
 
-    return { clearedTransactionIds, adjustmentTx };
+    return {clearedTransactionIds, adjustmentTx};
 }
 
 function printAdjustmentPrompt(unreconciledTransactions: TransactionDetail[], remainingDifference: number) {
@@ -135,16 +138,4 @@ function printAdjustmentPrompt(unreconciledTransactions: TransactionDetail[], re
         }
         return promptText;
     }
-}
-
-function createAdjustmentTx(account: Account, remainingDifference: number): SaveTransaction {
-    return {
-        account_id: account.id,
-        date: utils.getCurrentDateInISOFormat(),
-        amount: remainingDifference,
-        payee_name: "ReconCLI for YNAB: Adjustment",
-        memo: "Entered automatically by ReconCLI for YNAB",
-        cleared: ClearedEnum.Reconciled,
-        // TODO: get inflow category
-    };
 }
