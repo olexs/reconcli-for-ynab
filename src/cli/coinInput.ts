@@ -1,7 +1,7 @@
-import {InputMode} from "../options";
-import {question} from "./readline";
-import {formatYnabAmount} from "./formatYnabAmount";
-import {getNumberInput} from "./getNumberInput";
+import { InputMode } from '../options';
+import { question } from './readline';
+import { formatYnabAmount } from './formatYnabAmount';
+import { getNumberInput } from './getNumberInput';
 
 const coinMaps = new Map<InputMode, {name: string; value: number}[]>([
     ['euro-coins', [
@@ -48,7 +48,7 @@ export async function coinInput(mode: InputMode): Promise<number> {
     for (const coin of coins) {
         let validInput = false;
         while (!validInput) {
-            const inputRaw = (await question(`Number of ${coin.name} [0]: `)) || "0";
+            const inputRaw = (await question(`Number of ${coin.name} [0]: `)) || '0';
             const inputNumber = parseInt(inputRaw);
             if (!isNaN(inputNumber) && inputNumber >= 0) {
                 validInput = true;
@@ -66,4 +66,3 @@ export async function coinInput(mode: InputMode): Promise<number> {
 
     return coinsTotalAmount + paperCashAmount;
 }
-

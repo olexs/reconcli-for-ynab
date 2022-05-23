@@ -1,20 +1,23 @@
-import {Account, api, BudgetSummary, SaveTransaction, TransactionDetail, UpdateTransaction} from "ynab";
-import {reconcileWithoutAdjustment} from "../cli/reconcileWithoutAdjustment";
-import {reconcileWithAdjustment} from "../cli/reconcileWithAdjustment";
+import {
+    Account, api, BudgetSummary, SaveTransaction, TransactionDetail, UpdateTransaction,
+} from 'ynab';
+import { reconcileWithoutAdjustment } from '../cli/reconcileWithoutAdjustment';
+import { reconcileWithAdjustment } from '../cli/reconcileWithAdjustment';
 import ClearedEnum = TransactionDetail.ClearedEnum;
 
-export async function reconcileTransactions(ynabApi: api,
-                                            budget: BudgetSummary,
-                                            account: Account,
-                                            clearedBalance: number,
-                                            inputBalance: number):
+export async function reconcileTransactions(
+    ynabApi: api,
+    budget: BudgetSummary,
+    account: Account,
+    clearedBalance: number,
+    inputBalance: number,
+):
     Promise<{ updatedTransactions: Array<UpdateTransaction>, adjustmentTransaction?: SaveTransaction }> {
-
     const transactionsResponse = await ynabApi.transactions.getTransactionsByAccount(budget.id, account.id);
-    const transactions = transactionsResponse.data.transactions;
+    const { transactions } = transactionsResponse.data;
 
     let reconciledTransactionIds: string[];
-    let adjustmentTransaction: SaveTransaction | undefined = undefined;
+    let adjustmentTransaction: SaveTransaction | undefined;
 
     if (clearedBalance === inputBalance) {
         reconciledTransactionIds = reconcileWithoutAdjustment(transactions);
@@ -26,15 +29,14 @@ export async function reconcileTransactions(ynabApi: api,
 
     return {
         updatedTransactions: reconciledTransactionIds
-            .map(id => transactions.find(tx => tx.id === id) as TransactionDetail)
-            .map(tx => ({
+            .map((id) => transactions.find((tx) => tx.id === id) as TransactionDetail)
+            .map((tx) => ({
                 id: tx.id,
                 account_id: account.id,
                 cleared: ClearedEnum.Reconciled,
                 date: tx.date,
-                amount: tx.amount
+                amount: tx.amount,
             })),
-        adjustmentTransaction
+        adjustmentTransaction,
     };
 }
-

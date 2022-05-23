@@ -1,12 +1,11 @@
-import {api as YnabApi, SaveTransaction} from "ynab";
-import {createAdjustmentTx} from "./createAdjustmentTx";
+import { api as YnabApi, SaveTransaction } from 'ynab';
+import { createAdjustmentTx } from './createAdjustmentTx';
 import ClearedEnum = SaveTransaction.ClearedEnum;
 
 jest.mock('./getInflowCategory');
 const apiMock = jest.mocked(new YnabApi('', ''));
 
 describe('createAdjustmentTx()', () => {
-
     test('when remainingDifference is 0.0, then do not create a transaction', async () => {
         const remainingDifference = 0.0;
 
@@ -28,5 +27,4 @@ describe('createAdjustmentTx()', () => {
         expect(transaction.category_id).toEqual('mock_inflow_category_id');
         expect(transaction.account_id).toEqual(accountId);
     });
-
 });

@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
-import {program, Option} from "commander";
-import {CliOptions} from "./options";
-import {main} from "./main";
+import { program, Option } from 'commander';
+import { CliOptions } from './options';
+import { main } from './main';
 
 program
     .description('ReconCLI for YNAB - a CLI for quickly reconciling YNAB accounts')

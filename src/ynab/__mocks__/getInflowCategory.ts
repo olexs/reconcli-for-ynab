@@ -1,4 +1,4 @@
-import {api, Category} from "ynab";
+import { api, Category } from 'ynab';
 
 export async function getInflowCategory(ynabApi: api, budgetId: string): Promise<Category> {
     return {
@@ -9,6 +9,6 @@ export async function getInflowCategory(ynabApi: api, budgetId: string): Promise
         balance: 0,
         deleted: false,
         category_group_id: 'mock_default_category_group_id',
-        activity: 0
+        activity: 0,
     };
 }

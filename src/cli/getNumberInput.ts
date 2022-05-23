@@ -1,5 +1,5 @@
-import {question} from "./readline";
-import {formatYnabAmount} from "./formatYnabAmount";
+import { question } from './readline';
+import { formatYnabAmount } from './formatYnabAmount';
 
 export async function getNumberInput(prompt: string, defaultAmount: number): Promise<number> {
     let inputAmount: number = defaultAmount;
