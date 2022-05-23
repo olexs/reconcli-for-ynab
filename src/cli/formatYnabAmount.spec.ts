@@ -1,6 +1,6 @@
 import {formatYnabAmount} from "./formatYnabAmount";
 
-describe('formatYnabAmount()', function () {
+describe('formatYnabAmount()', () => {
     test.each([
         {input: 0, output: '0.00'},
         {input: 1, output: '0.00'},

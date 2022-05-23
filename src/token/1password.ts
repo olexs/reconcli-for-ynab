@@ -1,5 +1,6 @@
-const util = require('util');
-const exec = util.promisify(require('child_process').exec);
+import util = require('util');
+import childProcess = require('child_process');
+const exec = util.promisify(childProcess.exec);
 
 export async function getTokenFrom1PasswordCLI(item: string, fieldLabel: string): Promise<string> {
     console.info("Retrieving access token from 1Password CLI...");
