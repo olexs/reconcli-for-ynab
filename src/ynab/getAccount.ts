@@ -9,7 +9,7 @@ export async function getAccount(ynabApi: api, options: CliOptions, budgetId: st
     if (options.account) {
         account = openAccounts.find((b) => b.name === options.account);
         if (!account) {
-            console.error(`Account with the name ${options.account} (provided via -a/--account) could not be found, or it is closed. Aborting.`);
+            console.error(`Account with the name ${options.account} could not be found, or it is closed. Aborting.`);
             process.exit(1);
         }
     } else {

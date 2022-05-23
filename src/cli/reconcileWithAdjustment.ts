@@ -18,7 +18,8 @@ export async function reconcileWithAdjustment(
     Promise<{ clearedTransactionIds: string[], adjustmentTx?: SaveTransaction }> {
     console.info('New balance differs from the current cleared balance, need to adjust.');
 
-    const unreconciledTransactions = transactions.filter((tx) => tx.cleared !== ClearedEnum.Reconciled);
+    const unreconciledTransactions = transactions
+        .filter((tx) => tx.cleared !== ClearedEnum.Reconciled);
 
     let finishedReconciling = false;
     let remainingDifference = inputBalance - clearedBalance;
@@ -27,7 +28,7 @@ export async function reconcileWithAdjustment(
     while (!finishedReconciling) {
         const promptText = printAdjustmentPrompt(unreconciledTransactions, remainingDifference);
         const input = await question(promptText);
-        const flipTxIndex = parseInt(input);
+        const flipTxIndex = parseInt(input, 10);
 
         if (input.trim() === 'a') {
             console.info('Reconciliation aborted. Thank you for using ReconCLI for YNAB!');
@@ -38,9 +39,11 @@ export async function reconcileWithAdjustment(
                 console.info(`Created an adjustment transaction of ${formatYnabAmount(remainingDifference)}.`);
             }
             finishedReconciling = true;
-        } else if (!isNaN(flipTxIndex) && flipTxIndex >= 0 && flipTxIndex < unreconciledTransactions.length) {
+        } else if (!Number.isNaN(flipTxIndex) && flipTxIndex >= 0 && flipTxIndex < unreconciledTransactions.length) {
             const flippedTransaction = unreconciledTransactions[flipTxIndex];
-            flippedTransaction.cleared = flippedTransaction.cleared === ClearedEnum.Uncleared ? ClearedEnum.Cleared : ClearedEnum.Uncleared;
+            flippedTransaction.cleared = flippedTransaction.cleared === ClearedEnum.Uncleared
+                ? ClearedEnum.Cleared
+                : ClearedEnum.Uncleared;
             remainingDifference -= flippedTransaction.amount;
             console.info(`Marked transaction ${flipTxIndex} as ${getStatusText(flippedTransaction.cleared)}`);
         } else if (unreconciledTransactions.length > 0) {

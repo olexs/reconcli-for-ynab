@@ -12,7 +12,7 @@ export async function reconcileTransactions(
     clearedBalance: number,
     inputBalance: number,
 ):
-    Promise<{ updatedTransactions: Array<UpdateTransaction>, adjustmentTransaction?: SaveTransaction }> {
+    Promise<{ updatedTransactions: Array<UpdateTransaction>, adjustmentTx?: SaveTransaction }> {
     const transactionsResponse = await ynabApi.transactions.getTransactionsByAccount(budget.id, account.id);
     const { transactions } = transactionsResponse.data;
 
@@ -37,6 +37,6 @@ export async function reconcileTransactions(
                 date: tx.date,
                 amount: tx.amount,
             })),
-        adjustmentTransaction,
+        adjustmentTx: adjustmentTransaction,
     };
 }

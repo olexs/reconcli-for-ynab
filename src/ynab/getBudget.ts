@@ -17,7 +17,8 @@ export async function getBudget(ynabApi: api, options: CliOptions) {
             : budgetsResponse.data.default_budget;
         if (!budget) {
             const budgetNames = budgetsResponse.data.budgets.map((b) => b.name);
-            console.error(`There are multiple budgets (${budgetNames.join(', ')}), and none is set as default. Choose one via -b/--budget or set a default budget in YNAB.`);
+            console.error(`There are multiple budgets (${budgetNames.join(', ')}), and none is set as default.`
+                          + 'Choose one via -b/--budget or set a default budget in YNAB.');
             process.exit(1);
         }
     }

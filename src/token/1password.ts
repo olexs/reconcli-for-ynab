@@ -14,7 +14,7 @@ export async function getTokenFrom1PasswordCLI(item: string, fieldLabel: string)
 async function checkOpCliAvailable(): Promise<void> {
     try {
         const { stdout } = await exec('which op');
-        if (!stdout || stdout.trim() == '') {
+        if (!stdout || stdout.trim() === '') {
             console.error("No 'op' binary available on PATH. Make sure you have 1Password CLI 2 installed.");
             process.exit(1);
         }

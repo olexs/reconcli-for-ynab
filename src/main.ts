@@ -23,14 +23,14 @@ export async function main(options: CliOptions): Promise<void> {
     console.info(`Current cleared balance: ${formatYnabAmount(clearedBalance)}`);
 
     const inputBalance = await getInputBalance(clearedBalance, options.input);
-    const { updatedTransactions, adjustmentTransaction } = await reconcileTransactions(ynabApi, budget, account, clearedBalance, inputBalance);
+    const { updatedTransactions, adjustmentTx } = await reconcileTransactions(ynabApi, budget, account, clearedBalance, inputBalance);
 
     if (updatedTransactions.length > 0) {
         await ynabApi.transactions.updateTransactions(budget.id, { transactions: updatedTransactions });
         console.info(`Successfully saved ${updatedTransactions.length} cleared transactions as reconciled.`);
     }
-    if (adjustmentTransaction) {
-        await ynabApi.transactions.createTransaction(budget.id, { transaction: adjustmentTransaction });
+    if (adjustmentTx) {
+        await ynabApi.transactions.createTransaction(budget.id, { transaction: adjustmentTx });
         console.info('Successfully saved the adjustment transaction.');
     }
 

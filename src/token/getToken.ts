@@ -18,6 +18,7 @@ function getTokenFromOptions(options: CliOptions): string {
         console.info('Using provided YNAB Personal Access Token');
         return options.token;
     }
-    console.error("You must either specify the YNAB Personal Access Token manually using -t/--token, or enable 1Password retrieval with '-m 1password'.");
+    console.error('You must either specify the YNAB Personal Access Token manually using -t/--token, '
+        + "or enable 1Password retrieval with '-m 1password'.");
     process.exit(1);
 }

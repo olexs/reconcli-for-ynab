@@ -14,7 +14,8 @@ describe('createAdjustmentTx()', () => {
         expect(transactionResult).toBeUndefined();
     });
 
-    test('when remainingDifference is not 0.0, then create a reconciled adjustment transaction with the specified amount and inflow category', async () => {
+    test('when remainingDifference is not 0.0, then create a reconciled adjustment transaction '
+        + 'with the specified amount and inflow category', async () => {
         const accountId = 'mock_account_id';
         const remainingDifference = 23.42;
 

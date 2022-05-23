@@ -21,6 +21,8 @@
         "jest"
     ],
     "rules": {
+        "max-len": ["error", 140],
+        "function-paren-newline": ["error", "consistent"],
         "indent": ["error", 4, {
             "FunctionDeclaration": {"parameters": "first"}
         }],
@@ -28,6 +30,8 @@
         "consistent-return": "warn",
         "no-use-before-define": "off",
         "no-await-in-loop": "off",
+        "no-void": ["error", { "allowAsStatement": true }],
+        "no-restricted-syntax": "off",
         "import/extensions": "off",
         "import/prefer-default-export": "off"
     }

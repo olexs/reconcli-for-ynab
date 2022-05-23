@@ -49,8 +49,8 @@ export async function coinInput(mode: InputMode): Promise<number> {
         let validInput = false;
         while (!validInput) {
             const inputRaw = (await question(`Number of ${coin.name} [0]: `)) || '0';
-            const inputNumber = parseInt(inputRaw);
-            if (!isNaN(inputNumber) && inputNumber >= 0) {
+            const inputNumber = parseInt(inputRaw, 10);
+            if (!Number.isNaN(inputNumber) && inputNumber >= 0) {
                 validInput = true;
                 coinsTotalAmount += Math.round(inputNumber * coin.value * 1000);
             } else {

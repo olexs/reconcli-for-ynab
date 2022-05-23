@@ -28,7 +28,7 @@
     "build": "tsc -p .",
     "run:local": "npm run build && sudo npm i -g && ynab-reconcile",
     "test": "jest",
-    "lint": "eslint --ext .ts ."
+    "lint": "eslint --ext .ts ./src"
   },
   "devDependencies": {
     "@types/jest": "^27.5.1",

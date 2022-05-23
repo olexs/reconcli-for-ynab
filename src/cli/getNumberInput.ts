@@ -5,14 +5,15 @@ export async function getNumberInput(prompt: string, defaultAmount: number): Pro
     let inputAmount: number = defaultAmount;
 
     do {
-        const inputBalanceRaw = (await question(`${prompt} [${formatYnabAmount(defaultAmount)}]: `)) || formatYnabAmount(defaultAmount);
+        const inputRaw = await question(`${prompt} [${formatYnabAmount(defaultAmount)}]: `);
+        const inputBalanceRaw = inputRaw || formatYnabAmount(defaultAmount);
         inputAmount = parseFloat(inputBalanceRaw);
-        if (isNaN(inputAmount)) {
+        if (Number.isNaN(inputAmount)) {
             console.error(`Could not parse '${inputBalanceRaw}' as a valid floating point number, try again.`);
         } else {
             inputAmount = Math.round(inputAmount * 1000);
         }
-    } while (isNaN(inputAmount));
+    } while (Number.isNaN(inputAmount));
 
     return inputAmount;
 }

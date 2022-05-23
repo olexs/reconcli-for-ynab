@@ -2,7 +2,8 @@ import { SaveTransaction, TransactionDetail } from 'ynab';
 import ClearedEnum = SaveTransaction.ClearedEnum;
 import { formatYnabAmount } from './formatYnabAmount';
 
-export function printTransactions(clearedTransactions: Partial<TransactionDetail>[], printClearedStatus: boolean) {
+export function printTransactions(clearedTransactions: Partial<TransactionDetail>[],
+                                  printClearedStatus: boolean) {
     console.table(clearedTransactions.map((tx) => ({
         Date: tx.date,
         Payee: tx.payee_name,
