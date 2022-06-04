@@ -1,7 +1,7 @@
 import { InputMode } from '../options';
 import { question } from './readline';
 import { formatYnabAmount } from './formatYnabAmount';
-import { getNumberInput } from './getNumberInput';
+import { getYnabBalanceInput } from './getYnabBalanceInput';
 
 const coinMaps = new Map<InputMode, {name: string; value: number}[]>([
     ['euro-coins', [
@@ -61,7 +61,7 @@ export async function coinInput(mode: InputMode): Promise<number> {
 
     console.info(`Total amount from coins is ${formatYnabAmount(coinsTotalAmount)}.`);
 
-    const paperCashAmount = await getNumberInput('Enter the amount of paper cash', 0);
+    const paperCashAmount = await getYnabBalanceInput('Enter the amount of paper cash', 0);
     console.info(`Total balance from coins and paper cash is ${formatYnabAmount(coinsTotalAmount + paperCashAmount)}.`);
 
     return coinsTotalAmount + paperCashAmount;
