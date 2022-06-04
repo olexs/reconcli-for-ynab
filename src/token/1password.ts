@@ -6,7 +6,7 @@ const exec = util.promisify(childProcess.exec);
 export async function getTokenFrom1PasswordCLI(item: string, fieldLabel: string): Promise<string> {
     console.info('Retrieving access token from 1Password CLI...');
     await checkOpCliAvailable();
-    const token = retrieveTokenViaCli(item, fieldLabel);
+    const token = await retrieveTokenViaCli(item, fieldLabel);
     console.info('Token successfully retrieved from 1Password CLI');
     return token;
 }

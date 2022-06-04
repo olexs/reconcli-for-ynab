@@ -8,8 +8,7 @@ program
     .description('ReconCLI for YNAB - a CLI for quickly reconciling YNAB accounts')
     .addOption(new Option('-m, --token-mode <mode>',
         'Token retrieval mode: direct input or 1Password CLI')
-        .choices(['direct', '1password'])
-        .default('direct'))
+        .choices(['direct', '1password']))
     .option('-t, --token <token>',
         'YNAB Personal Access Token (for direct input mode)')
     .option('--op-item <item>',

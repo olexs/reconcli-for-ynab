@@ -8,6 +8,6 @@ export type CliOptions = {
     input: InputMode
 }
 
-export type TokenMode = 'direct' | '1password';
+export type TokenMode = 'param' | 'input' | '1password';
 
 export type InputMode = 'number' | 'euro-coins' | 'usd-coins' | 'gbp-coins';
