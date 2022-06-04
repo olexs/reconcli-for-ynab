@@ -1,5 +1,6 @@
 import { Account, api } from 'ynab';
-import { CliOptions } from '../options';
+import {CliOptions, TokenMode} from '../options';
+import inquirer from "inquirer";
 
 export async function getAccount(ynabApi: api, options: CliOptions, budgetId: string) {
     const accountsResponse = await ynabApi.accounts.getAccounts(budgetId);
@@ -15,12 +16,20 @@ export async function getAccount(ynabApi: api, options: CliOptions, budgetId: st
     } else {
         account = openAccounts.length === 1
             ? openAccounts[0]
-            : null;
-        if (!account) {
-            const accountNames = openAccounts.map((b) => b.name);
-            console.error(`There are multiple open accounts in the budget: ${accountNames.join(', ')}. Choose one via -a/--account.`);
-            process.exit(1);
-        }
+            : await inquireAccountSelection(openAccounts);
     }
     return account;
+}
+
+async function inquireAccountSelection(accounts: Account[]): Promise<Account> {
+    const answers = await inquirer.prompt([{
+        type: 'list',
+        name: 'account',
+        message: 'Please choose an account to reconcile:',
+        choices: accounts.map((acc) => ({
+            value: acc,
+            name: acc.name
+        })),
+    }]);
+    return answers.account as Account;
 }
