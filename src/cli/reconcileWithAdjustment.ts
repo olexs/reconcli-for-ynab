@@ -1,10 +1,8 @@
-import {
-    Account, api, BudgetSummary, SaveTransaction, TransactionDetail,
-} from 'ynab';
-import { question } from './readline';
-import { createAdjustmentTx } from '../ynab/createAdjustmentTx';
-import { formatYnabAmount } from './formatYnabAmount';
-import { getStatusText, printTransactions } from './printTransactions';
+import {Account, api, BudgetSummary, SaveTransaction, TransactionDetail,} from 'ynab';
+import {createAdjustmentTx} from '../ynab/createAdjustmentTx';
+import {formatYnabAmount} from './formatYnabAmount';
+import {formatTransactionLine, getStatusText, printTransactions} from './printTransactions';
+import inquirer from "inquirer";
 import ClearedEnum = TransactionDetail.ClearedEnum;
 
 export async function reconcileWithAdjustment(
@@ -26,8 +24,7 @@ export async function reconcileWithAdjustment(
     let adjustmentTx: SaveTransaction | undefined;
 
     while (!finishedReconciling) {
-        const promptText = printAdjustmentPrompt(unreconciledTransactions, remainingDifference);
-        const input = await question(promptText);
+        const input = await inquireAboutAdjustmentProcess(unreconciledTransactions, remainingDifference);
         const flipTxIndex = parseInt(input, 10);
 
         if (input.trim() === 'a') {
@@ -45,7 +42,7 @@ export async function reconcileWithAdjustment(
                 ? ClearedEnum.Cleared
                 : ClearedEnum.Uncleared;
             remainingDifference -= flippedTransaction.amount;
-            console.info(`Marked transaction ${flipTxIndex} as ${getStatusText(flippedTransaction.cleared)}`);
+            console.info(`Marked transaction ${flipTxIndex + 1} as ${getStatusText(flippedTransaction.cleared)}`);
         } else if (unreconciledTransactions.length > 0) {
             console.error(`Invalid input. Enter a number between 0 and ${unreconciledTransactions.length - 1}, 'f' or 'a'.`);
         } else {
@@ -57,34 +54,35 @@ export async function reconcileWithAdjustment(
         .filter((tx) => tx.cleared === ClearedEnum.Cleared)
         .map((tx) => tx.id);
 
-    return { clearedTransactionIds, adjustmentTx };
+    return {clearedTransactionIds, adjustmentTx};
 }
 
-function printAdjustmentPrompt(unreconciledTransactions: TransactionDetail[], remainingDifference: number) {
-    console.info('----------');
-    if (unreconciledTransactions.length > 0) {
-        console.info('Following transactions are not yet reconciled:');
-        printTransactions(unreconciledTransactions, true);
-
-        let promptText: string;
-        if (remainingDifference === 0) {
-            console.info('No difference remaining, new balance matches the cleared transactions.');
-            promptText = "Enter a tx index to clear or unclear it, 'f' to finish reconciliation, or 'a' to abort: ";
-        } else {
-            console.info(`Remaining difference: ${formatYnabAmount(remainingDifference)}`);
-            promptText = "Enter a tx index to clear or unclear it, 'f' to create an adjustment tx and finish, or 'a' to abort: ";
-        }
-        return promptText;
-    }
-    console.info('There are no unreconciled transactions.');
-
-    let promptText: string;
-    if (remainingDifference === 0) {
-        console.info('No difference remaining, new balance matches the current cleared balance.');
-        promptText = "Enter 'f' to finish reconciliation, or 'a' to abort: ";
-    } else {
-        console.info(`Remaining difference: ${formatYnabAmount(remainingDifference)}.`);
-        promptText = "Enter 'f' to create an adjustment transaction and finish reconciliation, or 'a' to abort: ";
-    }
-    return promptText;
+async function inquireAboutAdjustmentProcess(unreconciledTransactions: TransactionDetail[],
+                                             remainingDifference: number): Promise<string> {
+    const answers = await inquirer.prompt([{
+        type: 'list',
+        loop: false,
+        name: 'option',
+        message: remainingDifference === 0
+            ? 'No difference remaining, new balance matches the cleared transactions. Choose a tx to (un)clear:'
+            : `Remaining difference: ${formatYnabAmount(remainingDifference)}. Choose a tx to (un)clear:`,
+        choices: [...unreconciledTransactions.map((tx, index) => ({
+            value: `${index}`,
+            name: formatTransactionLine(tx, true),
+            short: `${tx.cleared === ClearedEnum.Uncleared ? 'Clear' : 'Unclear'} transaction ${index + 1}`
+        })), {
+            value: 'f',
+            name: `${remainingDifference !== 0
+                ? '✅ Create adjustment transaction and finish reconciliation'
+                : '✅ Finish reconciliation'}`,
+            short: `${remainingDifference !== 0
+                ? 'Create adjustment tx and finish'
+                : 'Finish'}`
+        }, {
+            value: 'a',
+            name: '❌ Abort reconciliation',
+            short: 'Abort reconciliation'
+        }],
+    }]);
+    return answers.option as string;
 }
