@@ -1,6 +1,6 @@
 import { Account, api } from 'ynab';
-import {CliOptions, TokenMode} from '../options';
-import inquirer from "inquirer";
+import inquirer from 'inquirer';
+import { CliOptions } from '../options';
 
 export async function getAccount(ynabApi: api, options: CliOptions, budgetId: string) {
     const accountsResponse = await ynabApi.accounts.getAccounts(budgetId);
@@ -28,7 +28,7 @@ async function inquireAccountSelection(accounts: Account[]): Promise<Account> {
         message: 'Please choose an account to reconcile:',
         choices: accounts.map((acc) => ({
             value: acc,
-            name: acc.name
+            name: acc.name,
         })),
     }]);
     return answers.account as Account;

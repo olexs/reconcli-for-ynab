@@ -1,8 +1,6 @@
+import inquirer from 'inquirer';
 import { InputMode } from '../options';
-import { question } from './readline';
 import { formatYnabAmount } from './formatYnabAmount';
-import { getYnabBalanceInput } from './getYnabBalanceInput';
-import inquirer from "inquirer";
 
 const coinMaps = new Map<InputMode, {name: string; value: number}[]>([
     ['euro-coins', [

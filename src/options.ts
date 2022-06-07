@@ -1,11 +1,11 @@
 export type CliOptions = {
-    tokenMode: TokenMode,
+    tokenMode?: TokenMode,
     token?: string,
     budget?: string,
     account?: string,
     opItem: string,
     opFieldLabel: string,
-    input: InputMode
+    input?: InputMode
 }
 
 export type TokenMode = 'param' | 'input' | '1password';

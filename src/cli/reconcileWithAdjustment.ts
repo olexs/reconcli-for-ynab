@@ -1,8 +1,10 @@
-import {Account, api, BudgetSummary, SaveTransaction, TransactionDetail,} from 'ynab';
-import {createAdjustmentTx} from '../ynab/createAdjustmentTx';
-import {formatYnabAmount} from './formatYnabAmount';
-import {formatTransactionLine, getStatusText, printTransactions} from './printTransactions';
-import inquirer from "inquirer";
+import {
+    Account, api, BudgetSummary, SaveTransaction, TransactionDetail,
+} from 'ynab';
+import inquirer from 'inquirer';
+import { createAdjustmentTx } from '../ynab/createAdjustmentTx';
+import { formatYnabAmount } from './formatYnabAmount';
+import { formatTransactionLine, getStatusText } from './printTransactions';
 import ClearedEnum = TransactionDetail.ClearedEnum;
 
 export async function reconcileWithAdjustment(
@@ -54,7 +56,7 @@ export async function reconcileWithAdjustment(
         .filter((tx) => tx.cleared === ClearedEnum.Cleared)
         .map((tx) => tx.id);
 
-    return {clearedTransactionIds, adjustmentTx};
+    return { clearedTransactionIds, adjustmentTx };
 }
 
 async function inquireAboutAdjustmentProcess(unreconciledTransactions: TransactionDetail[],
@@ -69,7 +71,7 @@ async function inquireAboutAdjustmentProcess(unreconciledTransactions: Transacti
         choices: [...unreconciledTransactions.map((tx, index) => ({
             value: `${index}`,
             name: formatTransactionLine(tx, true),
-            short: `${tx.cleared === ClearedEnum.Uncleared ? 'Clear' : 'Unclear'} transaction ${index + 1}`
+            short: `${tx.cleared === ClearedEnum.Uncleared ? 'Clear' : 'Unclear'} transaction ${index + 1}`,
         })), {
             value: 'f',
             name: `${remainingDifference !== 0
@@ -77,11 +79,11 @@ async function inquireAboutAdjustmentProcess(unreconciledTransactions: Transacti
                 : '✅ Finish reconciliation'}`,
             short: `${remainingDifference !== 0
                 ? 'Create adjustment tx and finish'
-                : 'Finish'}`
+                : 'Finish'}`,
         }, {
             value: 'a',
             name: '❌ Abort reconciliation',
-            short: 'Abort reconciliation'
+            short: 'Abort reconciliation',
         }],
     }]);
     return answers.option as string;

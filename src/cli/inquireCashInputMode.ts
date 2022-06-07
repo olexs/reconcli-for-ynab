@@ -1,5 +1,5 @@
-import {InputMode} from "../options";
-import inquirer from "inquirer";
+import inquirer from 'inquirer';
+import { InputMode } from '../options';
 
 export async function inquireCashInputMode(): Promise<InputMode> {
     const answers = await inquirer.prompt([{
@@ -8,16 +8,16 @@ export async function inquireCashInputMode(): Promise<InputMode> {
         message: 'Selected account is a cash account. Choose a balance input mode:',
         choices: [{
             value: 'number',
-            name: 'Direct balance number input'
+            name: 'Direct balance number input',
         }, {
             value: 'euro-coins',
-            name: '🇪🇺 Euro coin counts'
+            name: '🇪🇺 Euro coin counts',
         }, {
             value: 'usd-coins',
-            name: '🇺🇸 USD coin counts'
+            name: '🇺🇸 USD coin counts',
         }, {
             value: 'gbp-coins',
-            name: '🇬🇧 GBP coin counts'
+            name: '🇬🇧 GBP coin counts',
         }],
     }]);
     return answers.inputMode as InputMode;

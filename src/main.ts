@@ -1,4 +1,5 @@
 import * as ynab from 'ynab';
+import { Account } from 'ynab';
 import { CliOptions } from './options';
 import { getToken } from './token/getToken';
 import { getBudget } from './ynab/getBudget';
@@ -6,8 +7,7 @@ import { getAccount } from './ynab/getAccount';
 import { getInputBalance } from './cli/getInputBalance';
 import { formatYnabAmount } from './cli/formatYnabAmount';
 import { reconcileTransactions } from './ynab/reconcileTransactions';
-import {Account} from "ynab";
-import {inquireCashInputMode} from "./cli/inquireCashInputMode";
+import { inquireCashInputMode } from './cli/inquireCashInputMode';
 
 export async function main(options: CliOptions): Promise<void> {
     console.log('Welcome to ReconCLI for YNAB!');
@@ -21,14 +21,12 @@ export async function main(options: CliOptions): Promise<void> {
     const account = await getAccount(ynabApi, options, budget.id);
     console.info(`Account: ${account.name}`);
 
-    if (account.type === Account.TypeEnum.Cash && !options.input) {
-        options.input = await inquireCashInputMode();
-    }
+    const inputMode = options.input || (account.type === Account.TypeEnum.Cash ? await inquireCashInputMode() : 'number');
 
     const clearedBalance = account.cleared_balance;
     console.info(`Current cleared balance: ${formatYnabAmount(clearedBalance)}`);
 
-    const inputBalance = await getInputBalance(clearedBalance, options.input);
+    const inputBalance = await getInputBalance(clearedBalance, inputMode);
     const { updatedTransactions, adjustmentTx } = await reconcileTransactions(ynabApi, budget, account, clearedBalance, inputBalance);
 
     if (updatedTransactions.length > 0) {
