@@ -23,8 +23,7 @@ program
         'Name of the YNAB account (ignored if there is only one account in the budget)')
     .addOption(new Option('-i, --input <mode>',
         'Amount input mode: simple number, or coin counts for cash')
-        .choices(['number', 'euro-coins', 'usd-coins', 'gbp-coins'])
-        .default('number'))
+        .choices(['number', 'euro-coins', 'usd-coins', 'gbp-coins']))
     .parse(process.argv);
 
 const options = program.opts<CliOptions>();

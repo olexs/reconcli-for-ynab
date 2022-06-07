@@ -2,6 +2,7 @@ import { InputMode } from '../options';
 import { question } from './readline';
 import { formatYnabAmount } from './formatYnabAmount';
 import { getYnabBalanceInput } from './getYnabBalanceInput';
+import inquirer from "inquirer";
 
 const coinMaps = new Map<InputMode, {name: string; value: number}[]>([
     ['euro-coins', [
@@ -37,31 +38,30 @@ const coinMaps = new Map<InputMode, {name: string; value: number}[]>([
     ]],
 ]);
 
-export async function coinInput(mode: InputMode): Promise<number> {
+export async function inquireCoinCounts(mode: InputMode): Promise<number> {
     const coins = coinMaps.get(mode);
     if (!coins) {
         console.error(`Cannot find coin map for '${mode}', aborting.`);
         process.exit(1);
     }
 
-    let coinsTotalAmount = 0;
-    for (const coin of coins) {
-        let validInput = false;
-        while (!validInput) {
-            const inputRaw = (await question(`Number of ${coin.name} [0]: `)) || '0';
-            const inputNumber = parseInt(inputRaw, 10);
-            if (!Number.isNaN(inputNumber) && inputNumber >= 0) {
-                validInput = true;
-                coinsTotalAmount += Math.round(inputNumber * coin.value * 1000);
-            } else {
-                console.error('Invalid input, please input an integer >= 0 or nothing');
-            }
-        }
-    }
+    const answers = await inquirer.prompt([...coins.map((coin) => ({
+        name: coin.name,
+        type: 'number',
+        default: 0,
+        message: `Number of ${coin.name}:`,
+    })), {
+        name: 'paper cash',
+        type: 'number',
+        default: 0,
+        message: 'Enter the amount of paper cash:',
+    }]);
 
-    console.info(`Total amount from coins is ${formatYnabAmount(coinsTotalAmount)}.`);
+    const coinsTotalAmount = coins
+        .map((coin) => coin.value * answers[coin.name] * 1000)
+        .reduce((x, y) => x + y);
+    const paperCashAmount = answers['paper cash'] * 1000;
 
-    const paperCashAmount = await getYnabBalanceInput('Enter the amount of paper cash', 0);
     console.info(`Total balance from coins and paper cash is ${formatYnabAmount(coinsTotalAmount + paperCashAmount)}.`);
 
     return coinsTotalAmount + paperCashAmount;

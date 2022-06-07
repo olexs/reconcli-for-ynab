@@ -6,6 +6,8 @@ import { getAccount } from './ynab/getAccount';
 import { getInputBalance } from './cli/getInputBalance';
 import { formatYnabAmount } from './cli/formatYnabAmount';
 import { reconcileTransactions } from './ynab/reconcileTransactions';
+import {Account} from "ynab";
+import {inquireCashInputMode} from "./cli/inquireCashInputMode";
 
 export async function main(options: CliOptions): Promise<void> {
     console.log('Welcome to ReconCLI for YNAB!');
@@ -18,6 +20,10 @@ export async function main(options: CliOptions): Promise<void> {
 
     const account = await getAccount(ynabApi, options, budget.id);
     console.info(`Account: ${account.name}`);
+
+    if (account.type === Account.TypeEnum.Cash && !options.input) {
+        options.input = await inquireCashInputMode();
+    }
 
     const clearedBalance = account.cleared_balance;
     console.info(`Current cleared balance: ${formatYnabAmount(clearedBalance)}`);

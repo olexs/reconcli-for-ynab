@@ -1,10 +1,10 @@
 import { InputMode } from '../options';
-import { coinInput } from './coinInput';
+import { inquireCoinCounts} from './coinInput';
 import { getYnabBalanceInput } from './getYnabBalanceInput';
 
-export async function getInputBalance(clearedBalance: number, mode: InputMode): Promise<number> {
+export async function getInputBalance(clearedBalance: number, mode: InputMode = 'number'): Promise<number> {
     if (mode === 'number') {
         return getYnabBalanceInput('Enter new balance', clearedBalance);
     }
-    return coinInput(mode);
+    return inquireCoinCounts(mode);
 }
