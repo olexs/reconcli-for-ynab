@@ -68,23 +68,29 @@ async function inquireAboutAdjustmentProcess(unreconciledTransactions: Transacti
         message: remainingDifference === 0
             ? 'No difference remaining, new balance matches the cleared transactions. Choose a tx to (un)clear:'
             : `Remaining difference: ${formatYnabAmount(remainingDifference)}. Choose a tx to (un)clear:`,
-        choices: [...unreconciledTransactions.map((tx, index) => ({
-            value: `${index}`,
-            name: formatTransactionLine(tx, true),
-            short: `${tx.cleared === ClearedEnum.Uncleared ? 'Clear' : 'Unclear'} transaction ${index + 1}`,
-        })), {
-            value: 'f',
-            name: `${remainingDifference !== 0
-                ? '✅ Create adjustment transaction and finish reconciliation'
-                : '✅ Finish reconciliation'}`,
-            short: `${remainingDifference !== 0
-                ? 'Create adjustment tx and finish'
-                : 'Finish'}`,
-        }, {
-            value: 'a',
-            name: '❌ Abort reconciliation',
-            short: 'Abort reconciliation',
-        }],
+        choices: [
+            new inquirer.Separator(),
+            ...unreconciledTransactions.map((tx, index) => ({
+                value: `${index}`,
+                name: formatTransactionLine(tx, true),
+                short: `${tx.cleared === ClearedEnum.Uncleared ? 'Clear' : 'Unclear'} transaction ${index + 1}`,
+            })),
+            new inquirer.Separator(),
+            {
+                value: 'f',
+                name: `${remainingDifference !== 0
+                    ? '✅ Create adjustment transaction and finish reconciliation'
+                    : '✅ Finish reconciliation'}`,
+                short: `${remainingDifference !== 0
+                    ? 'Create adjustment tx and finish'
+                    : 'Finish'}`,
+            },
+            {
+                value: 'a',
+                name: '❌ Abort reconciliation',
+                short: 'Abort reconciliation',
+            },
+        ],
     }]);
     return answers.option as string;
 }
