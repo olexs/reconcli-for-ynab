@@ -1,4 +1,5 @@
 import { api, BudgetSummary } from 'ynab';
+import inquirer from 'inquirer';
 import { CliOptions } from '../options';
 
 export async function getBudget(ynabApi: api, options: CliOptions) {
@@ -14,13 +15,21 @@ export async function getBudget(ynabApi: api, options: CliOptions) {
     } else {
         budget = budgetsResponse.data.budgets.length === 1
             ? budgetsResponse.data.budgets[0]
-            : budgetsResponse.data.default_budget;
-        if (!budget) {
-            const budgetNames = budgetsResponse.data.budgets.map((b) => b.name);
-            console.error(`There are multiple budgets (${budgetNames.join(', ')}), and none is set as default.`
-                          + 'Choose one via -b/--budget or set a default budget in YNAB.');
-            process.exit(1);
-        }
+            : budgetsResponse.data.default_budget
+            || await inquireBudgetSelection(budgetsResponse.data.budgets);
     }
     return budget;
+}
+
+async function inquireBudgetSelection(budgets: BudgetSummary[]): Promise<BudgetSummary> {
+    const answers = await inquirer.prompt([{
+        type: 'list',
+        name: 'budget',
+        message: 'Please choose a budget to reconcile:',
+        choices: budgets.map((acc) => ({
+            value: acc,
+            name: acc.name,
+        })),
+    }]);
+    return answers.budget as BudgetSummary;
 }
