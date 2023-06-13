@@ -26,7 +26,7 @@
     "start": "ts-node src/index.ts",
     "watch": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/index.ts",
     "build": "tsc -p .",
-    "run:local": "npm run build && sudo npm i -g && ynab-reconcile",
+    "run:local": "npm run build && sudo npm i -g && reconcli-for-ynab",
     "test": "jest",
     "lint": "eslint --ext .ts ./src"
   },

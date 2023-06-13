@@ -1,9 +1,9 @@
 import {
-    Account, api, BudgetSummary, SaveTransaction, TransactionDetail, UpdateTransaction,
+    Account, api, BudgetSummary, SaveTransaction, TransactionDetail,
 } from 'ynab';
 import { reconcileWithoutAdjustment } from '../cli/reconcileWithoutAdjustment';
 import { reconcileWithAdjustment } from '../cli/reconcileWithAdjustment';
-import ClearedEnum = TransactionDetail.ClearedEnum;
+import ClearedEnum = SaveTransaction.ClearedEnum;
 
 export async function reconcileTransactions(
     ynabApi: api,
@@ -12,7 +12,7 @@ export async function reconcileTransactions(
     clearedBalance: number,
     inputBalance: number,
 ):
-    Promise<{ updatedTransactions: Array<UpdateTransaction>, adjustmentTx?: SaveTransaction }> {
+    Promise<{ updatedTransactions: Array<SaveTransaction>, adjustmentTx?: SaveTransaction }> {
     const transactionsResponse = await ynabApi.transactions.getTransactionsByAccount(budget.id, account.id);
     const { transactions } = transactionsResponse.data;
 
