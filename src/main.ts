@@ -1,5 +1,5 @@
 import * as ynab from 'ynab';
-import { Account } from 'ynab';
+import { AccountType } from 'ynab';
 import { CliOptions } from './options';
 import { getToken } from './token/getToken';
 import { getBudget } from './ynab/getBudget';
@@ -21,7 +21,7 @@ export async function main(options: CliOptions): Promise<void> {
     const account = await getAccount(ynabApi, options, budget.id);
     console.info(`Account: ${account.name}`);
 
-    const inputMode = options.input || (account.type === Account.TypeEnum.Cash ? await inquireCashInputMode() : 'number');
+    const inputMode = options.input || (account.type === AccountType.Cash ? await inquireCashInputMode() : 'number');
 
     const clearedBalance = account.cleared_balance;
     console.info(`Current cleared balance: ${formatYnabAmount(clearedBalance)}`);
