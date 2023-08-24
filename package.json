@@ -49,7 +49,7 @@
   "dependencies": {
     "commander": "^11.0.0",
     "inquirer": "^9.0.0",
-    "ynab": "^1.28.0"
+    "ynab": "^2.0.0"
   },
   "engines": {
     "node": ">=14"
