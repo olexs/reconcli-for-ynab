@@ -1,4 +1,4 @@
-import {TransactionClearedStatus, TransactionDetail} from 'ynab';
+import { TransactionClearedStatus, TransactionDetail } from 'ynab';
 import { formatYnabAmount } from './formatYnabAmount';
 
 export function printTransactions(clearedTransactions: Partial<TransactionDetail>[],

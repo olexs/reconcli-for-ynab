@@ -1,4 +1,4 @@
-import {TransactionClearedStatus, TransactionDetail} from 'ynab';
+import { TransactionClearedStatus, TransactionDetail } from 'ynab';
 import { printTransactions } from './printTransactions';
 
 export function reconcileWithoutAdjustment(transactions: TransactionDetail[]): string[] {

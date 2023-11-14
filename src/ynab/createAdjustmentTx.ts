@@ -1,4 +1,6 @@
-import {api, SaveTransaction, TransactionClearedStatus, utils} from 'ynab';
+import {
+    api, SaveTransaction, TransactionClearedStatus, utils,
+} from 'ynab';
 import { getInflowCategory } from './getInflowCategory';
 
 export async function createAdjustmentTx(

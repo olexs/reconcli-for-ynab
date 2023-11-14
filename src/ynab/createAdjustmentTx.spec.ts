@@ -1,4 +1,4 @@
-import {api as YnabApi, SaveTransaction, TransactionClearedStatus} from 'ynab';
+import { api as YnabApi, SaveTransaction, TransactionClearedStatus } from 'ynab';
 import { createAdjustmentTx } from './createAdjustmentTx';
 
 jest.mock('./getInflowCategory');
