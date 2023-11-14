@@ -1,10 +1,9 @@
-import { TransactionDetail } from 'ynab';
+import {TransactionClearedStatus, TransactionDetail} from 'ynab';
 import { printTransactions } from './printTransactions';
-import ClearedEnum = TransactionDetail.ClearedEnum;
 
 export function reconcileWithoutAdjustment(transactions: TransactionDetail[]): string[] {
-    const clearedTransactions = transactions.filter((tx) => tx.cleared === ClearedEnum.Cleared);
-    const unclearedTransactions = transactions.filter((tx) => tx.cleared === ClearedEnum.Uncleared);
+    const clearedTransactions = transactions.filter((tx) => tx.cleared === TransactionClearedStatus.Cleared);
+    const unclearedTransactions = transactions.filter((tx) => tx.cleared === TransactionClearedStatus.Uncleared);
 
     console.info('New balance matches the cleared balance, no adjustment necessary.');
     if (clearedTransactions.length > 0) {

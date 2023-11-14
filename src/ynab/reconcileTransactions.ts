@@ -1,9 +1,8 @@
 import {
-    Account, api, BudgetSummary, SaveTransaction, TransactionDetail,
+    Account, api, BudgetSummary, SaveTransaction, TransactionClearedStatus, TransactionDetail,
 } from 'ynab';
 import { reconcileWithoutAdjustment } from '../cli/reconcileWithoutAdjustment';
 import { reconcileWithAdjustment } from '../cli/reconcileWithAdjustment';
-import ClearedEnum = SaveTransaction.ClearedEnum;
 
 export async function reconcileTransactions(
     ynabApi: api,
@@ -33,7 +32,7 @@ export async function reconcileTransactions(
             .map((tx) => ({
                 id: tx.id,
                 account_id: account.id,
-                cleared: ClearedEnum.Reconciled,
+                cleared: TransactionClearedStatus.Reconciled,
                 date: tx.date,
                 amount: tx.amount,
             })),

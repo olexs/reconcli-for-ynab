@@ -1,5 +1,4 @@
-import { SaveTransaction, TransactionDetail } from 'ynab';
-import ClearedEnum = SaveTransaction.ClearedEnum;
+import {TransactionClearedStatus, TransactionDetail} from 'ynab';
 import { formatYnabAmount } from './formatYnabAmount';
 
 export function printTransactions(clearedTransactions: Partial<TransactionDetail>[],
@@ -9,10 +8,10 @@ export function printTransactions(clearedTransactions: Partial<TransactionDetail
     });
 }
 
-export function getStatusText(status?: ClearedEnum): string {
-    if (status === ClearedEnum.Cleared) return 'Cleared';
-    if (status === ClearedEnum.Uncleared) return 'Uncleared';
-    if (status === ClearedEnum.Reconciled) return 'Reconciled';
+export function getStatusText(status?: TransactionClearedStatus): string {
+    if (status === TransactionClearedStatus.Cleared) return 'Cleared';
+    if (status === TransactionClearedStatus.Uncleared) return 'Uncleared';
+    if (status === TransactionClearedStatus.Reconciled) return 'Reconciled';
     return '-';
 }
 

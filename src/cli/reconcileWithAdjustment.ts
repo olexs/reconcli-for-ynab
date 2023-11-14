@@ -1,11 +1,10 @@
 import {
-    Account, api, BudgetSummary, SaveTransaction, TransactionDetail,
+    Account, api, BudgetSummary, SaveTransaction, TransactionClearedStatus, TransactionDetail,
 } from 'ynab';
 import inquirer from 'inquirer';
 import { createAdjustmentTx } from '../ynab/createAdjustmentTx';
 import { formatYnabAmount } from './formatYnabAmount';
 import { formatTransactionLine, getStatusText } from './printTransactions';
-import ClearedEnum = TransactionDetail.ClearedEnum;
 
 export async function reconcileWithAdjustment(
     ynabApi: api,
@@ -19,7 +18,7 @@ export async function reconcileWithAdjustment(
     console.info('New balance differs from the current cleared balance, need to adjust.');
 
     const unreconciledTransactions = transactions
-        .filter((tx) => tx.cleared !== ClearedEnum.Reconciled);
+        .filter((tx) => tx.cleared !== TransactionClearedStatus.Reconciled);
 
     let finishedReconciling = false;
     let remainingDifference = inputBalance - clearedBalance;
@@ -40,9 +39,9 @@ export async function reconcileWithAdjustment(
             finishedReconciling = true;
         } else if (!Number.isNaN(flipTxIndex) && flipTxIndex >= 0 && flipTxIndex < unreconciledTransactions.length) {
             const flippedTransaction = unreconciledTransactions[flipTxIndex];
-            flippedTransaction.cleared = flippedTransaction.cleared === ClearedEnum.Uncleared
-                ? ClearedEnum.Cleared
-                : ClearedEnum.Uncleared;
+            flippedTransaction.cleared = flippedTransaction.cleared === TransactionClearedStatus.Uncleared
+                ? TransactionClearedStatus.Cleared
+                : TransactionClearedStatus.Uncleared;
             remainingDifference -= flippedTransaction.amount;
             console.info(`Marked transaction ${flipTxIndex + 1} as ${getStatusText(flippedTransaction.cleared)}`);
         } else if (unreconciledTransactions.length > 0) {
@@ -53,7 +52,7 @@ export async function reconcileWithAdjustment(
     }
 
     const clearedTransactionIds = unreconciledTransactions
-        .filter((tx) => tx.cleared === ClearedEnum.Cleared)
+        .filter((tx) => tx.cleared === TransactionClearedStatus.Cleared)
         .map((tx) => tx.id);
 
     return { clearedTransactionIds, adjustmentTx };
@@ -73,7 +72,7 @@ async function inquireAboutAdjustmentProcess(unreconciledTransactions: Transacti
             ...unreconciledTransactions.map((tx, index) => ({
                 value: `${index}`,
                 name: formatTransactionLine(tx, true),
-                short: `${tx.cleared === ClearedEnum.Uncleared ? 'Clear' : 'Unclear'} transaction ${index + 1}`,
+                short: `${tx.cleared === TransactionClearedStatus.Uncleared ? 'Clear' : 'Unclear'} transaction ${index + 1}`,
             })),
             new inquirer.Separator(),
             {

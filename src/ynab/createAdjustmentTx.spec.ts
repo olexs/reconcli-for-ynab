@@ -1,6 +1,5 @@
-import { api as YnabApi, SaveTransaction } from 'ynab';
+import {api as YnabApi, SaveTransaction, TransactionClearedStatus} from 'ynab';
 import { createAdjustmentTx } from './createAdjustmentTx';
-import ClearedEnum = SaveTransaction.ClearedEnum;
 
 jest.mock('./getInflowCategory');
 const apiMock = jest.mocked(new YnabApi('', ''));
@@ -23,7 +22,7 @@ describe('createAdjustmentTx()', () => {
 
         expect(transactionResult).toBeTruthy();
         const transaction = transactionResult as SaveTransaction;
-        expect(transaction.cleared).toEqual(ClearedEnum.Reconciled);
+        expect(transaction.cleared).toEqual(TransactionClearedStatus.Reconciled);
         expect(transaction.amount).toEqual(remainingDifference);
         expect(transaction.category_id).toEqual('mock_inflow_category_id');
         expect(transaction.account_id).toEqual(accountId);

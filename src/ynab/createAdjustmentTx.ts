@@ -1,6 +1,5 @@
-import { api, SaveTransaction, utils } from 'ynab';
+import {api, SaveTransaction, TransactionClearedStatus, utils} from 'ynab';
 import { getInflowCategory } from './getInflowCategory';
-import ClearedEnum = SaveTransaction.ClearedEnum;
 
 export async function createAdjustmentTx(
     ynabApi: api,
@@ -19,7 +18,7 @@ export async function createAdjustmentTx(
         amount: remainingDifference,
         payee_name: 'ReconCLI for YNAB: Adjustment',
         memo: 'Entered automatically by ReconCLI for YNAB',
-        cleared: ClearedEnum.Reconciled,
+        cleared: TransactionClearedStatus.Reconciled,
         category_id: inflowCategory.id,
         approved: true,
     };
