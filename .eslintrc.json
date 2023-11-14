@@ -34,5 +34,13 @@
         "no-restricted-syntax": "off",
         "import/extensions": "off",
         "import/prefer-default-export": "off"
-    }
+    },
+    "overrides": [
+        {
+            "files": ["**/__mocks__/*.ts"],
+            "rules": {
+                "@typescript-eslint/no-unused-vars": "warn"
+            }
+        }
+    ]
 }
