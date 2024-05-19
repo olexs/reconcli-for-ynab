@@ -8,8 +8,12 @@
     {
       "matchDepTypes": ["devDependency"],
       "matchUpdateTypes": ["patch", "minor"],
-      "groupName": "dev dependencies",
+      "groupName": "custom dev dependencies group",
       "automerge": true
+    },
+    {
+      "matchPackagePrefixes": ["eslint", "@typescript-eslint"],
+      "groupName": "custom eslint group"
     }
   ],
   "platformAutomerge": true
