@@ -1,6 +1,7 @@
 import {
-    Account, api, BudgetSummary, SaveTransaction, TransactionClearedStatus, TransactionDetail,
+    Account, api, BudgetSummary, TransactionClearedStatus, TransactionDetail,
 } from 'ynab';
+import { SaveTransactionWithIdOrImportId } from 'ynab/dist/models/SaveTransactionWithIdOrImportId';
 import inquirer from 'inquirer';
 import { createAdjustmentTx } from '../ynab/createAdjustmentTx';
 import { formatYnabAmount } from './formatYnabAmount';
@@ -14,7 +15,7 @@ export async function reconcileWithAdjustment(
     budget: BudgetSummary,
     account: Account,
 ):
-    Promise<{ clearedTransactionIds: string[], adjustmentTx?: SaveTransaction }> {
+    Promise<{ clearedTransactionIds: string[], adjustmentTx?: SaveTransactionWithIdOrImportId }> {
     console.info('New balance differs from the current cleared balance, need to adjust.');
 
     const unreconciledTransactions = transactions
@@ -22,7 +23,7 @@ export async function reconcileWithAdjustment(
 
     let finishedReconciling = false;
     let remainingDifference = inputBalance - clearedBalance;
-    let adjustmentTx: SaveTransaction | undefined;
+    let adjustmentTx: SaveTransactionWithIdOrImportId | undefined;
 
     while (!finishedReconciling) {
         const input = await inquireAboutAdjustmentProcess(unreconciledTransactions, remainingDifference);
