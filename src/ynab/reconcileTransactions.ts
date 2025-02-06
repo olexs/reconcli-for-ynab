@@ -1,6 +1,7 @@
 import {
-    Account, api, BudgetSummary, SaveTransaction, TransactionClearedStatus, TransactionDetail,
+    Account, api, BudgetSummary, TransactionClearedStatus, TransactionDetail,
 } from 'ynab';
+import { SaveTransactionWithIdOrImportId } from 'ynab/dist/models/SaveTransactionWithIdOrImportId';
 import { reconcileWithoutAdjustment } from '../cli/reconcileWithoutAdjustment';
 import { reconcileWithAdjustment } from '../cli/reconcileWithAdjustment';
 
@@ -11,12 +12,15 @@ export async function reconcileTransactions(
     clearedBalance: number,
     inputBalance: number,
 ):
-    Promise<{ updatedTransactions: Array<SaveTransaction>, adjustmentTx?: SaveTransaction }> {
+    Promise<{
+        updatedTransactions: Array<SaveTransactionWithIdOrImportId>,
+        adjustmentTx?: SaveTransactionWithIdOrImportId
+    }> {
     const transactionsResponse = await ynabApi.transactions.getTransactionsByAccount(budget.id, account.id);
     const { transactions } = transactionsResponse.data;
 
     let reconciledTransactionIds: string[];
-    let adjustmentTransaction: SaveTransaction | undefined;
+    let adjustmentTransaction: SaveTransactionWithIdOrImportId | undefined;
 
     if (clearedBalance === inputBalance) {
         reconciledTransactionIds = reconcileWithoutAdjustment(transactions);

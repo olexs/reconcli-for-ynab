@@ -1,6 +1,7 @@
 import {
-    api, SaveTransaction, TransactionClearedStatus, utils,
+    api, TransactionClearedStatus, utils,
 } from 'ynab';
+import { SaveTransactionWithIdOrImportId } from 'ynab/dist/models/SaveTransactionWithIdOrImportId';
 import { getInflowCategory } from './getInflowCategory';
 
 export async function createAdjustmentTx(
@@ -8,7 +9,7 @@ export async function createAdjustmentTx(
     budgetId: string,
     accountId: string,
     remainingDifference: number,
-): Promise<SaveTransaction | undefined> {
+): Promise<SaveTransactionWithIdOrImportId | undefined> {
     if (remainingDifference === 0.0) {
         return undefined;
     }
