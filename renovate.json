@@ -14,6 +14,10 @@
     {
       "matchPackagePrefixes": ["eslint", "@typescript-eslint"],
       "groupName": "custom eslint group"
+    },
+    {
+      "matchPackageNames": ["inquirer"],
+      "allowedVersions": "9.x"
     }
   ],
   "platformAutomerge": true
