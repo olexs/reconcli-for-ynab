@@ -47,7 +47,7 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
-    "commander": "^13.0.0",
+    "commander": "^14.0.0",
     "inquirer": "^9.0.0",
     "ynab": "^2.2.0"
   },
