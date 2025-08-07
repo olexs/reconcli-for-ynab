@@ -1,22 +1,32 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:base",
+    "config:recommended",
     ":automergeMinor"
   ],
   "packageRules": [
     {
-      "matchDepTypes": ["devDependency"],
-      "matchUpdateTypes": ["patch", "minor"],
+      "matchDepTypes": [
+        "devDependency"
+      ],
+      "matchUpdateTypes": [
+        "patch",
+        "minor"
+      ],
       "groupName": "custom dev dependencies group",
       "automerge": true
     },
     {
-      "matchPackagePrefixes": ["eslint", "@typescript-eslint"],
-      "groupName": "custom eslint group"
+      "groupName": "custom eslint group",
+      "matchPackageNames": [
+        "eslint{/,}**",
+        "@typescript-eslint{/,}**"
+      ]
     },
     {
-      "matchPackageNames": ["inquirer"],
+      "matchPackageNames": [
+        "inquirer"
+      ],
       "allowedVersions": "9.x"
     }
   ],
